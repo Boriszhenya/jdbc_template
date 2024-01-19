@@ -1,8 +1,10 @@
-package org.example;
+package org.example.first_lection;
 
+import javax.imageio.ImageReader;
+import java.awt.*;
 import java.sql.*;
 
-public class ConnectionExampleResultSet {
+public class ResultSetMethods {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306";
         String user = "root";
@@ -13,20 +15,19 @@ public class ConnectionExampleResultSet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             // Установка соединения
             Connection connection = DriverManager.getConnection(url, user, password);
-            // Чтобы работало надо выключить автокоммит //connection.setAutoCommit(false);
-            //Savepoint savepoint = connection.setSavepoint();
             // Делаем что-то с БД
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM world.city WHERE Population = (SELECT MAX(Population) FROM world.city);");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM sakila.payment WHERE payment_id = 999;");
             while (resultSet.next()){
-                int id = resultSet.getInt("ID");
-                String cityName = resultSet.getString(2);
-                int population = resultSet.getInt("Population");
-                System.out.printf("ID: %d; City: %s; Population: %d.%n", id, cityName, population);
+                int id = resultSet.getInt("payment_id");
+                //BLOb - BLOB (Binary Large Object)
+                //resultSet.getBlob("img");
+                Double amount = resultSet.getDouble("amount");
+                Date paymentDate = resultSet.getDate("payment_date");
+                Time paymentTime = resultSet.getTime("payment_date");
+                Timestamp lastUpdate = resultSet.getTimestamp("last_update");
+                System.out.printf("Payment ID: %d; Amount: %.2f; Payment date: %s; Payment time: %s; Last update: %s.%n", id, amount, paymentDate, paymentTime, lastUpdate);
             }
-            // Очистить память занятую результатами запроса
-            statement.close();
-            //connection.rollback(savepoint);
             // Не забываем закрывать соединение когда закончили операции с БД
             connection.close();
         } catch (ClassNotFoundException | SQLException e) {
@@ -34,4 +35,3 @@ public class ConnectionExampleResultSet {
         }
     }
 }
-

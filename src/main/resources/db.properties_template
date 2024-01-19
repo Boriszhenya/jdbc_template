@@ -1,0 +1,4 @@
+# Configuration settings for MySQL connection
+db.url=jdbc:mysql://%YOUR_HOST%:3306/%YOUR_SCHEME%
+db.user=%YOUR_USER%
+db.password=%YOUR_PASSWORD%
